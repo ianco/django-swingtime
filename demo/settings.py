@@ -20,7 +20,14 @@ DATABASES = {'default': {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': 'karate.db',
 }}
-LANGUAGES = (('en', 'English'),)
+gettext = lambda s: s
+LANGUAGES = (
+    ('en', gettext('English')),
+    ('es', gettext('Spanish')),
+    ('zh', gettext('Chinese')),
+    ('fr', gettext('French')),
+)
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
 TIME_ZONE = 'America/New_York'
@@ -45,10 +52,11 @@ TEMPLATES = [{
         )
     }
 }]
-ALLOWED_HOSTS = ['*'] 
+ALLOWED_HOSTS = ['*']
 
 ROOT_URLCONF = 'urls'
 INSTALLED_APPS = (
+    'modeltranslation',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -62,6 +70,7 @@ INSTALLED_APPS = (
 MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -80,4 +89,3 @@ except ImportError:
     pass
 else:
     INSTALLED_APPS += ('django_extensions',)
-
