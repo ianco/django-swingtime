@@ -3,10 +3,13 @@ import itertools
 import logging
 from datetime import datetime, timedelta, time
 from dateutil import parser
+
 from django import http
+from django.conf import settings
 from django.db import models
 from django.template.context import RequestContext
 from django.shortcuts import get_object_or_404, render
+from django.utils import translation
 
 from .models import Event, Occurrence
 from . import utils, forms
@@ -62,6 +65,10 @@ def event_view(
     ``recurrence_form``
         a form object for adding occurrences
     '''
+    lang = request.GET.get('lang')
+    if lang:
+        translation.activate(lang)
+
     event = get_object_or_404(Event, pk=pk)
     event_form = recurrence_form = None
     if request.method == 'POST':
@@ -78,14 +85,15 @@ def event_view(
         else:
             return http.HttpResponseBadRequest('Bad Request')
 
-    data = {
+    context = {
         'event': event,
         'event_form': event_form or event_form_class(instance=event),
         'recurrence_form': recurrence_form or recurrence_form_class(
             initial={'dtstart': datetime.now()}
-        )
+        ),
+        'languages': settings.LANGUAGES,
     }
-    return render(request, template, data)
+    return render(request, template, context)
 
 
 def occurrence_view(

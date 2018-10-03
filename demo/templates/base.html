@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,7 +31,7 @@
         img { border: none; }
         .w-100 { width: 100%; }
         .center { text-align : center; }
-        .container { 
+        .container {
             margin: 1em auto;
             width: 950px;
             padding: 1em 60px 60px 60px;
@@ -127,6 +129,7 @@
             .evt-bbc-odd, .evt-bbc-even { background-color: #aaa; }
             .evt-prv-odd { background-color: #8a9; }
             .evt-prv-even { background-color: #acb; }
+        .active-language { font-weight: bold; }
     </style>
     {% block extended_head %}{% endblock %}
 </head>
@@ -134,16 +137,26 @@
 <div class="container">
     <header role="banner">
         <h1><a href="{% url 'demo-home' %}">Swingtime Demo</a></h1>
+        {% if languages %}
+          {% get_current_language as LANGUAGE_CODE %}
+          <ul class="languages">
+            {% for language in languages %}
+              <li {% if language.0 == LANGUAGE_CODE %}class="active-language"{% endif %}>
+                <a href=".?lang={{ language.0 }}">{{ language.1 }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
     </header>
     <main role="main">
         {% block navigation %}
         <h2>The Karate Dojo</h2>
         <nav>
             <a href="{% url 'karate-home' %}">Home</a> &middot;
-            <a href="{% url 'swingtime-today' %}">Daily View</a> &middot; 
+            <a href="{% url 'swingtime-today' %}">Daily View</a> &middot;
             <a href="{% url 'swingtime-monthly-view' current_datetime.year current_datetime.month %}">
-                Monthly View</a> &middot; 
-            <a href="{% url 'swingtime-yearly-view' current_datetime.year %}">Yearly View</a> &middot; 
+                Monthly View</a> &middot;
+            <a href="{% url 'swingtime-yearly-view' current_datetime.year %}">Yearly View</a> &middot;
             <a href="{% url 'swingtime-events' %}">Event Listing</a>
         </nav>
         {% endblock navigation %}
