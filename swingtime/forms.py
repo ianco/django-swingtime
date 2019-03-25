@@ -393,7 +393,7 @@ class EventForm(forms.ModelForm):
         fields = "__all__"
 
     def __init__(self, *args, **kws):
-        super().__init__(*args, **kws)
+        super(EventForm, self).__init__(*args, **kws)
         self.fields['description'].required = False
 
 
