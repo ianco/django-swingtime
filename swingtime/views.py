@@ -158,7 +158,7 @@ def add_event(
                 logging.warning(exc)
 
         dtstart = dtstart or datetime.now()
-        event_form = event_form_class()
+        event_form = event_form_class(request=request)
         recurrence_form = recurrence_form_class(initial={'dtstart': dtstart})
 
     return render(
